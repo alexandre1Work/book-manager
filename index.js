@@ -20,6 +20,7 @@ app.get('/', (req, res) => {
     res.render('home')
 }); 
 
+//CRIAR
 app.post('/books/insertbook', (req, res) => {
     const title = req.body.title;
     const pageqty = req.body.pageqty
@@ -37,6 +38,7 @@ app.post('/books/insertbook', (req, res) => {
     })
 });
 
+//LISTAR
 app.get('/books', (req, res) => {
     const sql = `SELECT * FROM books`
 
@@ -52,6 +54,7 @@ app.get('/books', (req, res) => {
     })
 })
 
+//LISTAR POR ID
 app.get('/books/:id', (req, res) => {
     const id = req.params.id
 
@@ -69,6 +72,60 @@ app.get('/books/:id', (req, res) => {
         console.log(book)
     })
 });
+
+//EXIBIR OS DADOS NA VIEW DE EDIT
+app.get('/books/edit/:id', (req, res) => {
+    
+    const id = req.params.id
+    const sql = `SELECT * FROM books WHERE id = ${id}`
+
+    conn.query(sql, function(error, data) {
+        if (error) {
+            console.log(error)
+            return
+        }
+
+        const book = data[0];
+
+        res.render('editBook', { book })
+        console.log(book)
+    })
+});
+
+//ATUALIZAR
+app.post('/books/updatebook/:id', (req, res) => {
+    
+    const id = req.params.id
+    const title = req.body.title;
+    const pageqty = req.body.pageqty
+
+    const sql = `UPDATE books SET title = '${title}', pageqty = '${pageqty}' WHERE id = ${id}`
+
+    conn.query(sql, function(error, data) {
+        if (error) {
+            console.log(error)
+            return
+        }
+
+        res.redirect('/books')
+    })
+});
+
+//DELETAR
+app.post('/books/remove/:id', (req, res) => {
+    const id = req.params.id
+
+    const sql = `DELETE FROM books WHERE id = ${id}`
+
+    conn.query(sql, function (error) {
+        if (error) {
+            console.log(error)
+            return
+        }
+
+        res.redirect('/books')
+    })
+})
 
 //CONEXÃO COM O BANCO DE DADOS MYSQL
 const conn = mysql.createConnection({

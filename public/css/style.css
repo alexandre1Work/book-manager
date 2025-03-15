@@ -71,3 +71,14 @@ a:hover {
     color: #2980b9;
     text-decoration: underline;
 }
+
+.actions {
+    margin: 1em;
+    display: flex;
+    justify-content: center;
+}
+
+.actions a {
+   margin-right: 1em; 
+}
+
